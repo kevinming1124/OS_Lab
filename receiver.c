@@ -8,6 +8,10 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     if(mailbox_ptr->flag == 1){
         // Message Passing
         mqd_t mq = mq_open("msgQ", O_CREAT | O_RDONLY, 0666, NULL);
+        if(mq == -1){
+            printf("mq fail");
+            return;
+        }
         mq_receive(mq, message_ptr->message, 1024, NULL);
         if(strcmp(message_ptr->message, "EOF") == 0){
             printf("Sender exit!\n");
