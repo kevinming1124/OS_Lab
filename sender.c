@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
         attr.mq_maxmsg = 10;
         attr.mq_msgsize = 1024;
         attr.mq_curmsgs = 0;
-        mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, &attr);
+        mq = mq_open("/msgQ", O_CREAT | O_WRONLY, 0666, &attr);
     }else if(mailbox.flag == 2){
         printf("Shared Memory\n");
     }
