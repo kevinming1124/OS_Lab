@@ -16,6 +16,7 @@ char *shm_ptr;
 void send(message_t message, mailbox_t* mailbox_ptr){    
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_send);
+        printf("2");
         mqd_t mq=mq_open("msgq", O_CREAT|O_WRONLY,0666,NULL);
         if(mq==-1){
             perror("mq fail");
@@ -24,6 +25,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
         mq_send(mq,message.content,strlen(message.content),0);
         printf("in send: %s\n",message.content);
         sem_post(mutex_rece);
+        printf("3");
     }
     if(mailbox_ptr->flag==2){// share memory
         // sem_wait(empty);
@@ -62,6 +64,7 @@ int main(int argc,char* argv[]){
             if(strcmp(message.content,"EOF")!=0){
                 message.content[strlen(message.content)-1]='\0';
             }
+            printf("1");
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);
             send(message, &mailbox);
             clock_gettime(CLOCK_MONOTONIC_RAW, &end);
