@@ -27,7 +27,7 @@ typedef struct {
     /*  TODO: 
         Message structure for wrapper
     */
-    char message[100];
+    char message[2048];
 } message_t;
 
 void receive(message_t* message_ptr, mailbox_t* mailbox_ptr);
