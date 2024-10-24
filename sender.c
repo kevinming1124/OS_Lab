@@ -1,4 +1,5 @@
 #include "sender.h"
+mqd_t mq;
 void send(message_t message, mailbox_t* mailbox_ptr){
     /*  TODO: 
         1. Use flag to determine the communication method
@@ -21,7 +22,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
     }
 }
 
-mqd_t mq;
+
 
 int main(int argc, char *argv[]){
     /*  TODO: 
