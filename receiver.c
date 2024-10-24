@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
     while(1){
         sem_wait(sem_send);
         clock_gettime(CLOCK_MONOTONIC, &start);
-        receive(message, &mailbox);
+        receive(&message, &mailbox);
         clock_gettime(CLOCK_MONOTONIC, &end);
         sem_post(sem_recv);
         time_taken += (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
