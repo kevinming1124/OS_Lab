@@ -60,10 +60,6 @@ int main(int argc, char *argv[]){
         attr.mq_msgsize = 1024;
         attr.mq_curmsgs = 0;
         mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, &attr);
-        if(mq == -1){
-            perror("mq fail");
-            return 1;
-        }
     }else if(mailbox.flag == 2){
         printf("Shared Memory\n");
     }
