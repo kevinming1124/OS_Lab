@@ -22,7 +22,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
             return;
         }
         mq_send(mq,message.content,strlen(message.content),0);
-        // printf("in send: %s\n",message.content);
+        printf("in send: %s\n",message.content);
         sem_post(mutex_rece);
     }
     if(mailbox_ptr->flag==2){// share memory
