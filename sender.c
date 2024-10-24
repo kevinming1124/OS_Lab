@@ -35,8 +35,8 @@ int main(int argc, char *argv[]){
         6) If the message form the input file is EOF, send an exit message to the receiver.c
         7) Print the total sending time and terminate the sender.c
     */
-    sem_t *sem_send = sem_open("sender", 0);
-    sem_t *sem_recv = sem_open("receiver", 1);
+    sem_t *sem_send = sem_open("sender", O_CREAT, 0666, 0);
+    sem_t *sem_recv = sem_open("receiver", O_CREAT, 0666, 1);
     if (sem_send == SEM_FAILED || sem_recv == SEM_FAILED) {
         perror("sem_open");
         exit(EXIT_FAILURE);
