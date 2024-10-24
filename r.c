@@ -18,7 +18,7 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
         sem_wait(mutex_rece);
         mqd_t mq=mq_open("msgq",O_CREAT|O_RDONLY,0666,NULL);
         mq_receive(mq,message_ptr->content, 1024,NULL);
-        pinrtf("test receive: %s\n",message_ptr->content);
+        printf("test receive: %s\n",message_ptr->content);
         sem_post(mutex_send);
     }
     if(mailbox_ptr->flag==2){// share memory
