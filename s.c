@@ -12,14 +12,13 @@ message_t message;
 // sem_t *full;
 sem_t *mutex_send;
 sem_t *mutex_rece;
-mqd_t mq;
 char *shm_ptr;
 void send(message_t message, mailbox_t* mailbox_ptr){    
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_send);
-        mq=mq_open("msgq",O_CREAT|O_WRONLY,0666,NULL);
+        mqd_t mq=mq_open("msgq",O_CREAT|O_WRONLY,0666,NULL);
         mq_send(mq,message.content,strlen(message.content),0);
-        printf("in send: %s\n",message.content);
+        // printf("in send: %s\n",message.content);
         sem_post(mutex_rece);
     }
     if(mailbox_ptr->flag==2){// share memory
@@ -64,7 +63,7 @@ int main(int argc,char* argv[]){
             clock_gettime(CLOCK_MONOTONIC_RAW, &end);
             message.timestamp = (end.tv_sec - start.tv_sec)+(end.tv_nsec - start.tv_nsec) * 1e-9;
             time_taken+=message.timestamp;
-            printf("\033[34mSending message:\033[0m %s",message.content);
+            printf("\033[34mSending message:\033[0m %s\n",message.content);
         }
         strcpy(message.content,"EOF");
         clock_gettime(CLOCK_MONOTONIC_RAW, &start);
