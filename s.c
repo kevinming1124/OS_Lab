@@ -59,6 +59,10 @@ int main(int argc,char* argv[]){
         printf("\033[34mMessage Passing\033[0m\n");
         mutex_send = sem_open(SEM_MUTEX_send, O_CREAT, 0666, 1);
         mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
+        if(mutex_send == SEM_FAILED || mutex_rece == SEM_FAILED) {
+            perror("sem_open");
+            exit(EXIT_FAILURE);
+        }
         printf("-1");
         while(fgets(message.content,SHM_SIZE, file)!=NULL){
             printf("0");
