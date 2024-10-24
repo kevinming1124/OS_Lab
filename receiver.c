@@ -18,8 +18,8 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
         // Shared Memory
         char *name = "OS";
         int SIZE = 1024;
-        shm_fd = shm_open(name, O_RDONLY, 0666);
-        ptr = mmap(0, SIZE, PROT_READ, MAP_SHARED, shm_fd, 0);
+        int shm_fd = shm_open(name, O_RDONLY, 0666);
+        char* ptr = mmap(0, SIZE, PROT_READ, MAP_SHARED, shm_fd, 0);
         if(strcmp((char *)ptr, "EOF") == 0){
             printf("Sender exit!\n");
         }else{
@@ -30,7 +30,7 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     }
 }
 
-int main(){
+int main(int argc, char *argv[]){
     /*  TODO: 
         1) Call receive(&message, &mailbox) according to the flow in slide 4
         2) Measure the total receiving time

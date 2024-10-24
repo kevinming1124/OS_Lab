@@ -12,9 +12,9 @@ void send(message_t message, mailbox_t* mailbox_ptr){
         mq_send(mq, message.message, strlen(message.message), 0);
     }else if(mailbox_ptr->flag == 2){
         // Shared Memory
-        shm_fd = shm_open(name, O_CREAT | O_RDWR, 0666);
+        int shm_fd = shm_open(name, O_CREAT | O_RDWR, 0666);
         ftruncate(shm_fd, SIZE);
-        ptr = mmap(0, SIZE, PROT_WRITE, MAP_SHARED, shm_fd, 0);
+        char *ptr = mmap(0, SIZE, PROT_WRITE, MAP_SHARED, shm_fd, 0);
         sprintf(ptr, "%s", message.message);
         ptr += strlen(message.message);
     }
@@ -22,7 +22,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
 
 
 
-int main(){
+int main(int argc, char *argv[]){
     /*  TODO: 
         1) Call send(message, &mailbox) according to the flow in slide 4
         2) Measure the total sending time
