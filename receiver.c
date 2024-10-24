@@ -1,5 +1,5 @@
 #include "receiver.h"
-
+mqd_t mq;
 void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     /*  TODO: 
         1. Use flag to determine the communication method
@@ -7,7 +7,7 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     */
     if(mailbox_ptr->flag == 1){
         // Message Passing
-        mqd_t mq = mq_open("/msgQ", O_CREAT | O_RDONLY, 0666, NULL);
+        
         mq_receive(mq, message_ptr->message, 1024, NULL);
         if(strcmp(message_ptr->message, "EOF") == 0){
             printf("Sender exit!\n");
@@ -48,6 +48,11 @@ int main(int argc, char *argv[]){
     mailbox.flag = atoi(argv[1]);
     if(mailbox.flag == 1){
         printf("Message Passing\n");
+        mq = mq_open("/msgQ", O_CREAT | O_RDONLY, 0666, NULL);
+        if(mq == -1){
+            perror("mq fail");
+            return 1;
+        }
     }else if(mailbox.flag == 2){
         printf("Shared Memory\n");
     }
