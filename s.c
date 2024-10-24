@@ -56,6 +56,9 @@ int main(int argc,char* argv[]){
         mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
         
         while(fgets(message.content,SHM_SIZE, file)!=NULL){
+            if(strcmp(message.content,"EOF")!=0){
+                message.content[strlen(message.content)-1]='\0';
+            }
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);
             send(message, &mailbox);
             clock_gettime(CLOCK_MONOTONIC_RAW, &end);
