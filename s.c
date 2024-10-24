@@ -19,6 +19,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
         sem_wait(mutex_send);
         mq=mq_open("msgq",O_CREAT|O_WRONLY,0666,NULL);
         mq_send(mq,message.content,strlen(message.content),0);
+        printf("in send: %s\n",message.content);
         sem_post(mutex_rece);
     }
     if(mailbox_ptr->flag==2){// share memory
