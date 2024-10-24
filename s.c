@@ -1,4 +1,4 @@
-#include "s.h"
+#include "sender.h"
 #include <time.h>
 struct timespec start,end;
 double time_taken;
@@ -12,13 +12,13 @@ message_t message;
 // sem_t *full;
 sem_t *mutex_send;
 sem_t *mutex_rece;
+mqd_t mq;
 char *shm_ptr;
 void send(message_t message, mailbox_t* mailbox_ptr){    
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_send);
-        mqd_t mq=mq_open("msgq", O_CREAT|O_WRONLY,0666,NULL);
+        mq=mq_open("msgq",O_CREAT|O_RDWR,0666,NULL);
         mq_send(mq,message.content,strlen(message.content),0);
-        printf("in send: %s\n",message.content);
         sem_post(mutex_rece);
     }
     if(mailbox_ptr->flag==2){// share memory
@@ -51,18 +51,16 @@ int main(int argc,char* argv[]){
     char* result;
     if(mailbox.flag==1){// message passing
         printf("\033[34mMessage Passing\033[0m\n");
-        mutex_send = sem_open(SEM_MUTEX_send, O_CREAT, 0666, 1);
-        mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
-        while(fgets(message.content,SHM_SIZE, file)!=NULL){
-            // if(strcmp(message.content,"EOF")!=0){
-            //     message.content[strlen(message.content)-1]='\0';
-            // }
+        mutex_send = sem_open(SEM_MUTEX_send, O_CREAT|O_RDWR, 0666, 1);
+        mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT|O_RDWR, 0666, 0);
+        
+        while((result=fgets(message.content,SHM_SIZE, file))!=NULL){
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);
             send(message, &mailbox);
             clock_gettime(CLOCK_MONOTONIC_RAW, &end);
             message.timestamp = (end.tv_sec - start.tv_sec)+(end.tv_nsec - start.tv_nsec) * 1e-9;
             time_taken+=message.timestamp;
-            printf("\033[34mSending message:\033[0m %s\n",message.content);
+            printf("\033[34mSending message:\033[0m %s",message.content);
         }
         strcpy(message.content,"EOF");
         clock_gettime(CLOCK_MONOTONIC_RAW, &start);
@@ -75,7 +73,7 @@ int main(int argc,char* argv[]){
 
         //free space
         fclose(file);
-        // mq_close(mq);
+        mq_close(mq);
         sem_close(mutex_send);
         sem_close(mutex_rece);
 
