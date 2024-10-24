@@ -49,13 +49,13 @@ int main(int argc,char* argv[]){
     mailbox.flag=atoi(argv[1]);
     FILE *file = fopen(argv[2], "r");
     // printf("%d",mailbox.flag);
-    char* result;
+    // char* result;
     if(mailbox.flag==1){// message passing
         printf("\033[34mMessage Passing\033[0m\n");
         mutex_send = sem_open(SEM_MUTEX_send, O_CREAT, 0666, 1);
         mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
         
-        while((result=fgets(message.content,SHM_SIZE, file))!=NULL){
+        while(fgets(message.content,SHM_SIZE, file)!=NULL){
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);
             send(message, &mailbox);
             clock_gettime(CLOCK_MONOTONIC_RAW, &end);
