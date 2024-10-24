@@ -52,7 +52,7 @@ int main(int argc,char* argv[]){
             if(!strcmp(message.content,"EOF")){
                 break;
             }
-            printf("\033[34mReceiving message:\033[0m %s",message.content); 
+            printf("\033[34mReceiving message:\033[0m %s\n",message.content); 
         }
         printf("\n\033[31mSender exit!\033[0m\n");
         printf("Total time taken in receiving msg: %6f s\n",time_taken);
