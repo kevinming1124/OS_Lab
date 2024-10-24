@@ -7,8 +7,18 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     */
     if(mailbox_ptr->flag == 1){
         // Message Passing
-        char buffer[2048];
-        ssize_t bytes_read = mq_receive(mq, buffer, 2048, NULL);
+        struct mq_attr attr;
+        if (mq_getattr(mq, &attr) == -1) {
+            perror("mq_getattr");
+            return;
+        }
+
+        char *buffer = malloc(attr.mq_msgsize);
+        if (buffer == NULL) {
+            perror("malloc");
+            return;
+        }
+        ssize_t bytes_read = mq_receive(mq, buffer, attr.mq_msgsize, NULL);
         if(bytes_read == -1){
             perror("mq_receive");
             return;
