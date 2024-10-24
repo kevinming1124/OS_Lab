@@ -12,7 +12,7 @@
 #include <sys/mman.h>
 #include <semaphore.h>
 #include <time.h>
-#include<mqueue.h>
+#include <mqueue.h>
 
 #define SHM_NAME "/shm_share"
 #define SHM_SIZE 1024
@@ -32,7 +32,7 @@ typedef struct {
     /*  TODO: 
         Message structure for wrapper
     */
-    char content[1024];
+    char content[100];
     double timestamp;
 } message_t;
 
