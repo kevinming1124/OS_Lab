@@ -56,7 +56,7 @@ int main(int argc,char* argv[]){
     // printf("%d",mailbox.flag);
     char* result;
     if(mailbox.flag==1){// message passing
-        printf("\033[34mMessage Passing\033[0m\n");
+        printf("\033[34mMessage Passinga\033[0m\n");
         mutex_send = sem_open(SEM_MUTEX_send, O_CREAT, 0666, 1);
         mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
         if(mutex_send == SEM_FAILED || mutex_rece == SEM_FAILED) {
