@@ -37,6 +37,10 @@ int main(int argc, char *argv[]){
     */
     sem_t *sem_send = sem_open("sender", 0);
     sem_t *sem_recv = sem_open("receiver", 1);
+    if (sem_send == SEM_FAILED || sem_recv == SEM_FAILED) {
+        perror("sem_open");
+        exit(EXIT_FAILURE);
+    }
     struct timespec start, end;
     double time_taken = 0;
     message_t message;
