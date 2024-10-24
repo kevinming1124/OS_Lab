@@ -76,7 +76,7 @@ int main(int argc,char* argv[]){
 
         //free space
         fclose(file);
-        mq_close(mq);
+        // mq_close(mq);
         sem_close(mutex_send);
         sem_close(mutex_rece);
 
