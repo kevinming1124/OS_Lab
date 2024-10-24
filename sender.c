@@ -8,7 +8,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
     int SIZE = 1024;
     if(mailbox_ptr->flag == 1){
         // Message Passing
-        mqd_t mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, NULL);
+        
         mq_send(mq, message.message, strlen(message.message)+1, 0);
         
     }else if(mailbox_ptr->flag == 2){
@@ -21,7 +21,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
     }
 }
 
-
+mqd_t mq;
 
 int main(int argc, char *argv[]){
     /*  TODO: 
@@ -53,6 +53,11 @@ int main(int argc, char *argv[]){
     }
     if(mailbox.flag == 1){
         printf("Message Passing\n");
+        mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, NULL);
+        if(mq == -1){
+            perror("mq fail");
+            return 1;
+        }
     }else if(mailbox.flag == 2){
         printf("Shared Memory\n");
     }
