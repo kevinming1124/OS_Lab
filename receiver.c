@@ -7,8 +7,8 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     */
     if(mailbox_ptr->flag == 1){
         // Message Passing
-        
-        ssize_t bytes_read = mq_receive(mq, message_ptr->message, 2048, NULL);
+        char buffer[2048];
+        ssize_t bytes_read = mq_receive(mq, buffer, 2048, NULL);
         if(bytes_read == -1){
             perror("mq_receive");
             return;
@@ -16,7 +16,7 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
         if(strcmp(message_ptr->message, "EOF") == 0){
             printf("Sender exit!\n");
         }else{
-            printf("Receiving message: %s\n", message_ptr->message);
+            printf("Receiving message: %s\n", buffer);
         }
     }else if(mailbox_ptr->flag == 2){
         // Shared Memory
