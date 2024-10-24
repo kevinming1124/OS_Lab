@@ -1,4 +1,4 @@
-#include "sender.h"
+#include "s.h"
 #include <time.h>
 struct timespec start,end;
 double time_taken;
