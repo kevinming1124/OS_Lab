@@ -54,16 +54,16 @@ int main(int argc, char *argv[]){
     }
     if(mailbox.flag == 1){
         printf("Message Passing\n");
-        // struct mq_attr attr;
-        // attr.mq_flags = 0;
-        // attr.mq_maxmsg = 10;
-        // attr.mq_msgsize = 1024;
-        // attr.mq_curmsgs = 0;
+        struct mq_attr attr;
+        attr.mq_flags = 0;
+        attr.mq_maxmsg = 10;
+        attr.mq_msgsize = 1024;
+        attr.mq_curmsgs = 0;
         mq = mq_open("/msgQ", O_CREAT | O_WRONLY, 0666, NULL);
-        // if(mq == -1){
-        //     perror("mq fail");
-        //     return 1;
-        // }
+        if(mq == -1){
+            perror("mq fail");
+            return 1;
+        }
     }else if(mailbox.flag == 2){
         printf("Shared Memory\n");
     }
@@ -71,10 +71,8 @@ int main(int argc, char *argv[]){
         if(strcmp(message.message, "EOF") != 0)
             message.message[strlen(message.message) - 1] = '\0';
         sem_wait(sem_recv);
-        printf("1");
         clock_gettime(CLOCK_MONOTONIC, &start);
         send(message, &mailbox);
-        printf("3");
         clock_gettime(CLOCK_MONOTONIC, &end);
         sem_post(sem_send);
         time_taken += (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
