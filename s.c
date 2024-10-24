@@ -18,10 +18,6 @@ void send(message_t message, mailbox_t* mailbox_ptr){
         sem_wait(mutex_send);
         printf("2");
         mqd_t mq=mq_open("msgq", O_CREAT|O_WRONLY,0666,NULL);
-        if(mq==-1){
-            perror("mq fail");
-            return;
-        }
         mq_send(mq,message.content,strlen(message.content),0);
         printf("in send: %s\n",message.content);
         sem_post(mutex_rece);
@@ -56,13 +52,9 @@ int main(int argc,char* argv[]){
     // printf("%d",mailbox.flag);
     char* result;
     if(mailbox.flag==1){// message passing
-        printf("\033[34mMessage Passinga\033[0m\n");
+        printf("\033[34mMessage Passing\033[0m\n");
         mutex_send = sem_open(SEM_MUTEX_send, O_CREAT, 0666, 1);
         mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
-        if(mutex_send == SEM_FAILED || mutex_rece == SEM_FAILED) {
-            perror("sem_open");
-            exit(EXIT_FAILURE);
-        }
         printf("-1");
         while(fgets(message.content,SHM_SIZE, file)!=NULL){
             printf("0");
