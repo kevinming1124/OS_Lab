@@ -10,7 +10,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
         // Message Passing
         printf("2");
         mqd_t mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, NULL);
-        mq_send(mq, message.message, strlen(message.message), 0);
+        mq_send(mq, message.message, strlen(message.message)+1, 0);
     }else if(mailbox_ptr->flag == 2){
         // Shared Memory
         int shm_fd = shm_open(name, O_CREAT | O_RDWR, 0666);
