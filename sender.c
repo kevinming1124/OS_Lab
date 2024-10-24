@@ -8,16 +8,8 @@ void send(message_t message, mailbox_t* mailbox_ptr){
     int SIZE = 1024;
     if(mailbox_ptr->flag == 1){
         // Message Passing
-        struct mq_attr attr;
-        attr.mq_flags = 0;
-        attr.mq_maxmsg = 10;
-        attr.mq_msgsize = 1024;
-        attr.mq_curmsgs = 0;
-        mqd_t mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, &attr);
-        if(mq_send(mq, message.message, strlen(message.message)+1, 0)==-1){
-            perror("mq fail");
-            return;
-        }
+        mqd_t mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, NULL);
+        mq_send(mq, message.message, strlen(message.message)+1, 0);
         
     }else if(mailbox_ptr->flag == 2){
         // Shared Memory
