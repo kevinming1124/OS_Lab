@@ -8,6 +8,7 @@ void send(message_t message, mailbox_t* mailbox_ptr){
     int SIZE = 1024;
     if(mailbox_ptr->flag == 1){
         // Message Passing
+        printf("2");
         mqd_t mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, NULL);
         mq_send(mq, message.message, strlen(message.message), 0);
     }else if(mailbox_ptr->flag == 2){
@@ -54,10 +55,11 @@ int main(int argc, char *argv[]){
     while(fgets(message.message, 100, file) != NULL){
         if(strcmp(message.message, "EOF") != 0)
             message.message[strlen(message.message) - 1] = '\0';
-        printf("test message: %s\n", message.message);
         sem_wait(sem_recv);
+        printf("1");
         clock_gettime(CLOCK_MONOTONIC, &start);
         send(message, &mailbox);
+        printf("3");
         clock_gettime(CLOCK_MONOTONIC, &end);
         sem_post(sem_send);
         time_taken += (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) * 1e-9;
