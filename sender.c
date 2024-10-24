@@ -54,7 +54,12 @@ int main(int argc, char *argv[]){
     }
     if(mailbox.flag == 1){
         printf("Message Passing\n");
-        mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, NULL);
+        struct mq_attr attr;
+        attr.mq_flags = 0;
+        attr.mq_maxmsg = 10;
+        attr.mq_msgsize = 1024;
+        attr.mq_curmsgs = 0;
+        mq = mq_open("msgQ", O_CREAT | O_WRONLY, 0666, &attr);
         if(mq == -1){
             perror("mq fail");
             return 1;
