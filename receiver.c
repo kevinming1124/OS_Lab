@@ -8,7 +8,7 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     if(mailbox_ptr->flag == 1){
         // Message Passing
         
-        ssize_t bytes_read = mq_receive(mq, message_ptr->message, 1024, NULL);
+        ssize_t bytes_read = mq_receive(mq, message_ptr->message, 100, NULL);
         if(bytes_read == -1){
             perror("mq_receive");
             return;
