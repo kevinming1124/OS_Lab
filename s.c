@@ -17,6 +17,10 @@ void send(message_t message, mailbox_t* mailbox_ptr){
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_send);
         mqd_t mq=mq_open("msgq",O_CREAT|O_WRONLY,0666,NULL);
+        if(mq==-1){
+            perror("mq fail");
+            return;
+        }
         mq_send(mq,message.content,strlen(message.content),0);
         // printf("in send: %s\n",message.content);
         sem_post(mutex_rece);

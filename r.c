@@ -17,6 +17,10 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_rece);
         mqd_t mq=mq_open("msgq",O_CREAT|O_RDONLY,0666,NULL);
+        if(mq==-1){
+            perror("mq fail");
+            return;
+        }
         mq_receive(mq,message_ptr->content, 1024,NULL);
         printf("test receive: %s\n",message_ptr->content);
         sem_post(mutex_send);

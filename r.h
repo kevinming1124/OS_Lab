@@ -32,7 +32,7 @@ typedef struct {
     /*  TODO: 
         Message structure for wrapper
     */
-    char content[100];
+    char content[1024];
     double timestamp;
 } message_t;
 
