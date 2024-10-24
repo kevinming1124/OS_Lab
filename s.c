@@ -17,7 +17,7 @@ char *shm_ptr;
 void send(message_t message, mailbox_t* mailbox_ptr){    
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_send);
-        mq=mq_open("msgq",O_CREAT|O_RDWR,0666,NULL);
+        mq=mq_open("msgq",O_CREAT|O_WRONLY,0666,NULL);
         mq_send(mq,message.content,strlen(message.content),0);
         sem_post(mutex_rece);
     }
@@ -51,8 +51,8 @@ int main(int argc,char* argv[]){
     char* result;
     if(mailbox.flag==1){// message passing
         printf("\033[34mMessage Passing\033[0m\n");
-        mutex_send = sem_open(SEM_MUTEX_send, O_CREAT|O_RDWR, 0666, 1);
-        mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT|O_RDWR, 0666, 0);
+        mutex_send = sem_open(SEM_MUTEX_send, O_CREAT, 0666, 1);
+        mutex_rece = sem_open(SEM_MUTEX_rece, O_CREAT, 0666, 0);
         
         while((result=fgets(message.content,SHM_SIZE, file))!=NULL){
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);

@@ -17,7 +17,7 @@ char *shm_ptr;
 void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_rece);
-        mq=mq_open("msgq",O_CREAT|O_RDWR,0666,NULL);
+        mq=mq_open("msgq",O_CREAT|O_RDONLY,0666,NULL);
         mq_receive(mq,message_ptr->content, 1024,NULL);
         sem_post(mutex_send);
     }
@@ -40,8 +40,8 @@ int main(int argc,char* argv[]){
     mailbox.flag=atoi(argv[1]);
     if(mailbox.flag==1){
         printf("\033[34mMessage Passing\033[0m\n");
-        mutex_send = sem_open(SEM_MUTEX_send, O_RDWR, 0666);
-        mutex_rece = sem_open(SEM_MUTEX_rece, O_RDWR, 0666);
+        mutex_send = sem_open(SEM_MUTEX_send, 0);
+        mutex_rece = sem_open(SEM_MUTEX_rece, 0);
         //mq=mq_open("msgq",O_CREAT|O_RDWR,0666,NULL);
         while(1){
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);
