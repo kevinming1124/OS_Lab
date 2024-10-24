@@ -54,6 +54,7 @@ int main(int argc, char *argv[]){
     while(fgets(message.message, 100, file) != NULL){
         if(strcmp(message.message, "EOF") != 0)
             message.message[strlen(message.message) - 1] = '\0';
+        printf("test message: %s\n", message.message);
         sem_wait(sem_recv);
         clock_gettime(CLOCK_MONOTONIC, &start);
         send(message, &mailbox);
