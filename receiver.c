@@ -23,7 +23,7 @@ void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
             perror("mq_receive");
             return;
         }
-        if(strcmp(message_ptr->message, "EOF") == 0){
+        if(strcmp(buffer, "EOF") == 0){
             printf("Sender exit!\n");
         }else{
             printf("Receiving message: %s\n", buffer);

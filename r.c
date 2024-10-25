@@ -17,12 +17,23 @@ char *shm_ptr;
 void receive(message_t* message_ptr, mailbox_t* mailbox_ptr){
     if(mailbox_ptr->flag==1){// message passing
         sem_wait(mutex_rece);
-        mq=mq_open("msgq",O_CREAT|O_RDWR,0666,NULL);
-        if(mq==-1){
-            printf("mq fail");
+        struct mq_attr attr;
+        if (mq_getattr(mq, &attr) == -1) {
+            perror("mq_getattr");
             return;
         }
-        mq_receive(mq,message_ptr->content, 1024,NULL);
+
+        char *buffer = malloc(attr.mq_msgsize);
+        if (buffer == NULL) {
+            perror("malloc");
+            return;
+        }
+        ssize_t bytes_read = mq_receive(mq,buffer, attr.mq_msgsize,NULL);
+        if(bytes_read == -1){
+            perror("mq_receive");
+            return;
+        }
+        strncpy(message_ptr->content,buffer,SHM_SIZE);
         sem_post(mutex_send);
     }
     if(mailbox_ptr->flag==2){// share memory
@@ -46,7 +57,11 @@ int main(int argc,char* argv[]){
         printf("\033[34mMessage Passing\033[0m\n");
         mutex_send = sem_open(SEM_MUTEX_send, O_RDWR, 0666);
         mutex_rece = sem_open(SEM_MUTEX_rece, O_RDWR, 0666);
-        //mq=mq_open("msgq",O_CREAT|O_RDWR,0666,NULL);
+        mq=mq_open("/msgq",O_CREAT|O_RDWR,0666,NULL);
+        if(mq==-1){
+            printf("mq fail");
+            return;
+        }
         while(1){
             clock_gettime(CLOCK_MONOTONIC_RAW, &start);
             receive(&message, &mailbox);
